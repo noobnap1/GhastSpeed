@@ -17,7 +17,6 @@ loom {
 	mods {
 		"ghastspeed" {
 			sourceSet sourceSets.main
-			sourceSet sourceSets.client
 		}
 	}
 }
