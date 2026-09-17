@@ -1,44 +1,47 @@
 package pixeru.speedghast;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.HappyGhastEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.entity.event.v1.effect.ServerMobEffectEvents;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.happyghast.HappyGhast;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 
 public class GhastSpeed implements ModInitializer {
 	public static final String MOD_ID = "ghastspeed";
 
-	// Change this to whatever effect you want to drive the speed boost.
-	// Swap for your own registered effect's id if you have a custom one.
-	private static final Identifier SPEED_EFFECT_ID = Identifier.of("minecraft", "speed");
-
-	private static final double BASE_SPEED = 0.1;
-	private static final double PER_LEVEL_INCREMENT = 0.02;
+	private static final double BASE_SPEED = 0.05;
+	private static final double SPEED_START = 1.5;
+	private static final double SPEED_MULTIPLIER = 1.5;
 
 	@Override
 	public void onInitialize() {
-		ServerTickEvents.END_WORLD_TICK.register(world -> {
-			var speedEffect = Registries.getStatusEffect.(SPEED_EFFECT_ID);
+		ServerMobEffectEvents.AFTER_ADD.register((effect, entity, context) -> {
+			if (!(entity instanceof HappyGhast ghast)) return;
+
+			MobEffectInstance speedEffect = ghast.getEffect(MobEffects.SPEED);
 			if (speedEffect == null) return;
 
-			for (HappyGhastEntity ghast : world.getEntitiesByType(EntityType.HAPPY_GHAST, e -> true)) {
-				EntityAttributeInstance attribute = ghast.getAttributeInstance(EntityAttributes.FLYING_SPEED);
-				if (attribute == null) continue;
+			AttributeInstance attribute = ghast.getAttribute(Attributes.FLYING_SPEED);
+			if (attribute == null) return;
 
-				StatusEffectInstance effect = ghast.getStatusEffect(speedEffect);
-				if (effect != null) {
-					int level = effect.getAmplifier() + 1; // amplifier 0 = level 1
-					double newSpeed = BASE_SPEED + level * PER_LEVEL_INCREMENT;
-					attribute.setBaseValue(newSpeed);
-				} else {
-					attribute.setBaseValue(BASE_SPEED);
-				}
-			}
+			int level = speedEffect.getAmplifier() + 1;
+			double newSpeed = SPEED_START * Math.pow(SPEED_MULTIPLIER, level - 1);
+
+			attribute.setBaseValue(newSpeed);
+		});
+
+		ServerMobEffectEvents.AFTER_REMOVE.register((effect, entity, context) -> {
+			if (!(entity instanceof HappyGhast ghast)) return;
+
+			MobEffectInstance speedEffect = ghast.getEffect(MobEffects.SPEED);
+			if (speedEffect != null) return;
+
+			AttributeInstance attribute = ghast.getAttribute(Attributes.FLYING_SPEED);
+			if (attribute == null) return;
+
+			attribute.setBaseValue(BASE_SPEED);
 		});
 	}
 }

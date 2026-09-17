@@ -3,9 +3,9 @@
 	"id": "ghastspeed",
 	"version": "${version}",
 	"name": "GhastSpeed",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A simple mod to make ghasts become faster when hit with swiftness.",
 	"authors": [
-		"Me!"
+		"Pixeru!"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",

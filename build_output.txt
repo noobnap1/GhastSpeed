@@ -1,0 +1,32 @@
+
+> Configure project :
+Fabric Loom: 1.17.21
+
+> Task :compileJava FAILED
+/home/magma/Documents/repos/Ghastspeed/src/main/java/pixeru/speedghast/GhastSpeed.java:26: error: cannot find symbol
+			for (HappyGhast ghast : world.getEntitiesByType(EntityType.HAPPY_GHAST, e -> true)) {
+			                                                          ^
+  symbol:   variable HAPPY_GHAST
+  location: class EntityType
+1 error
+
+[Incubating] Problems report is available at: file:///home/magma/Documents/repos/Ghastspeed/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava' (registered by plugin class 'org.gradle.api.plugins.JavaBasePlugin').
+> Compilation failed; see the compiler output below.
+  /home/magma/Documents/repos/Ghastspeed/src/main/java/pixeru/speedghast/GhastSpeed.java:26: error: cannot find symbol
+  			for (HappyGhast ghast : world.getEntitiesByType(EntityType.HAPPY_GHAST, e -> true)) {
+  			                                                          ^
+    symbol:   variable HAPPY_GHAST
+    location: class EntityType
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 2s
+1 actionable task: 1 executed
